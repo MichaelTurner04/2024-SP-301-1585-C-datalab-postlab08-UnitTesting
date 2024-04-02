@@ -1,3 +1,4 @@
+
 // ~~~ Cell ~~~
     template<class T>
 Cell<T>::Cell(const T& e, Cell* n)
