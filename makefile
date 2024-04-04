@@ -7,7 +7,7 @@ main.o: main.cpp list.h list.hpp
 
 
 coverage: test
-	gcov -mr test_vector.cpp
+	gcov -mr test_main.cpp
 
 test: CFLAGS=--coverage
 
@@ -18,7 +18,7 @@ testsuite: test_main.o
 	g++ ${CFLAGS} $^ -o testsuite
 
 test_main.o: test_main.cpp
-	g++ -O3 -c test_main.cpp
+	g++ ${CFLAGS} -O3 -c test_main.cpp
 
 cleancoverage:
 	-@rm -f *.gcov *.gcno *.gcda

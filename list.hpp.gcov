@@ -1,0 +1,167 @@
+        -:    0:Source:list.hpp
+        -:    0:Graph:test_main.gcno
+        -:    0:Data:test_main.gcda
+        -:    0:Runs:2
+        -:    0:Source is newer than graph
+        -:    1:
+        -:    2:// ~~~ Cell ~~~
+        -:    3:    template<class T>
+       48:    4:Cell<T>::Cell(const T& e, Cell* n)
+        -:    5:{
+       48:    6:    elem = e;
+        6:    7:    next = n;
+        -:    8:}
+        -:    9:
+        -:   10:    template<class T>
+       10:   11:Cell<T>::Cell(const Cell& c)
+        -:   12:{
+       10:   13:    elem = c.elem;
+        -:   14:
+       10:   15:    if(c.next == NULL)
+        -:   16:    {
+        4:   17:        next = NULL;
+        -:   18:    }
+        -:   19:    else
+        -:   20:    {
+        6:   21:        next = new Cell(*(c.next));
+        -:   22:    }
+       10:   23:}
+        -:   24:
+        -:   25:// ~~~ List ~~~
+        -:   26:// Constructor
+        -:   27:    template<class T>
+       16:   28:List<T>::List()
+        -:   29:{
+       16:   30:    cell = NULL;
+        -:   31:}
+        -:   32:
+        -:   33:// Copy Constructor
+        -:   34:    template<class T>
+        2:   35:List<T>::List(const List& l)
+        -:   36:{
+        2:   37:    if(l.empty())
+        -:   38:    {
+    #####:   39:        cell = NULL;
+        -:   40:    }
+        -:   41:    else
+        -:   42:    {
+        2:   43:        cell = new Cell<T>(*(l.cell));
+        -:   44:    }
+        2:   45:}
+        -:   46:
+        -:   47:// Destructor
+        -:   48:    template<class T>
+        -:   49:List<T>::~List()
+        -:   50:{
+        4:   51:    Cell<T>* it = cell;
+        -:   52:    Cell<T>* toDelete = NULL;
+        -:   53:
+       78:   54:    while(it != NULL)
+        -:   55:    {
+        -:   56:        toDelete = it;
+       56:   57:        it = it->next;
+       56:   58:        delete toDelete;
+        -:   59:    }
+       20:   60:}
+        -:   61:
+        -:   62:// Inserting stuff
+        -:   63:    template<class T>
+        -:   64:void List<T>::prepend(const T& t)
+        -:   65:{
+       22:   66:    Cell<T>* h = new Cell<T>(t, cell);
+       16:   67:    cell = h;
+       16:   68:}
+        -:   69:
+        -:   70:    template<class T>
+       36:   71:void List<T>::append(const T& t)
+        -:   72:{
+       36:   73:    if(empty())
+        -:   74:    {
+        -:   75:        prepend(t);
+        -:   76:    }
+        -:   77:    else
+        -:   78:    {
+        -:   79:        Cell<T>* it = cell;
+       26:   80:        while(it->next != NULL)
+        -:   81:        {
+        -:   82:            it = it->next;
+        -:   83:        }
+        -:   84:
+       20:   85:        it->next = new Cell<T>(t, NULL);
+        -:   86:    }
+       36:   87:}
+        -:   88:
+        -:   89:// Removing stuff
+        -:   90:    template<class T>
+        2:   91:void List<T>::pop()
+        -:   92:{
+        2:   93:    if(empty())
+        -:   94:    {
+    #####:   95:        throw out_of_range("empty list");
+        -:   96:    }
+        -:   97:
+        2:   98:    Cell<T>* next = cell->next;
+        2:   99:    delete cell;
+        2:  100:    cell = next;
+        2:  101:}
+        -:  102:
+        -:  103:// Accessors
+        -:  104:    template<class T>
+       12:  105:T& List<T>::head()
+        -:  106:{
+       12:  107:    if(empty())
+        -:  108:    {
+    #####:  109:        throw out_of_range("empty list");
+        -:  110:    }
+        -:  111:
+       12:  112:    return cell->elem;
+        -:  113:}
+        -:  114:
+        -:  115:    template<class T>
+        4:  116:List<T> List<T>::tail()
+        -:  117:{
+        4:  118:    if(empty())
+        -:  119:    {
+    #####:  120:        throw out_of_range("empty list");
+        -:  121:    }
+        -:  122:
+        -:  123:    List<T> l;
+        -:  124:
+        4:  125:    if(cell->next == NULL)
+        -:  126:    {
+        2:  127:        return l;
+        -:  128:    }
+        -:  129:    else
+        -:  130:    {
+        2:  131:        l.cell = new Cell<T>(*(cell->next));
+        -:  132:    }
+        -:  133:}
+        -:  134:
+        -:  135:    template<class T>
+        -:  136:Cell<T>* List<T>::iterator()
+        -:  137:{
+        2:  138:    return cell;
+        -:  139:}
+        -:  140:
+        -:  141:// Properties
+        -:  142:template<class T>
+        -:  143:unsigned int List<T>::length() const
+        -:  144:{
+        -:  145:    unsigned int len = 0;
+       12:  146:    Cell<T>* it = cell;
+        -:  147:
+       38:  148:    while(it != NULL)
+        -:  149:    {
+       28:  150:        len++;
+       28:  151:        it = it->next;
+        -:  152:    }
+        -:  153:
+        -:  154:    return len;
+        -:  155:}
+        -:  156:
+        -:  157:template<class T>
+        -:  158:bool List<T>::empty() const
+        -:  159:{
+       58:  160:    return cell == NULL;
+        -:  161:}
+        -:  162:
